@@ -16,8 +16,7 @@ public class Telegram {
   public static String chiave = "";
     public static void main(String[] args) {
         TelegramAPI a= new TelegramAPI(chiave);
-        a.getUpdates();
-
+        a.getUpdates();       
     }
     
 }
