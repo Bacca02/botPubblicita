@@ -5,8 +5,13 @@
  */
 package telegram;
 
-import telegram.api.TelegramAPI;
+//import telegram.api.TelegramAPI;
 
+import telegram.api.TelegramAPI;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.xml.parsers.ParserConfigurationException;
+import org.xml.sax.SAXException;
 /**
  *
  * @author Utente
@@ -14,9 +19,8 @@ import telegram.api.TelegramAPI;
 public class Telegram {
 
   public static String chiave = "";
-    public static void main(String[] args) {
+    public static void main(String[] args){
         TelegramAPI a= new TelegramAPI(chiave);
-        a.getUpdates();       
+        a.getUpdates();    
     }
-    
 }

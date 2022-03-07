@@ -4,29 +4,24 @@
  * and open the template in the editor.
  */
 package telegram.api;
-
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.json.*;
 
 /**
  *
  * @author baccaglini_christian
  */
+
 public class TelegramAPI {
 
-    public String url;
+    String key;
+
     public TelegramAPI(String key) {
-        JSONArray arrayAtt = null;
-        url = "https://api.telegram.org/bot" + key;
+        //JSONArray arrayAtt = null;
+        this.key = key;
     }
 
     public void getUpdates() {
-        url+="/getUpdates";
-        new getUpdates(url);
+        new getUpdates(key);
     }
+
 }

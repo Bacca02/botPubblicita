@@ -3,12 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package OSM.api;
+package telegram.api;
 
 /**
  *
- * @author baccaglini_christian
+ * @author Utente
  */
-public class OSMapi {
+public class sendMessage {
+
+    //risposta al messaggio
+    public sendMessage(String key) {
+        
+    }
     
 }
