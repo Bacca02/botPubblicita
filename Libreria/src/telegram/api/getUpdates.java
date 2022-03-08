@@ -5,6 +5,7 @@
  */
 package telegram.api;
 
+import Osm.api.OsmAPI;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
@@ -13,8 +14,10 @@ import java.net.URL;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.parsers.ParserConfigurationException;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.xml.sax.SAXException;
 
 /**
  *
@@ -27,7 +30,7 @@ public class getUpdates {
         int updtate_id, message_id, id, id_chat, date;
         boolean is_bot;
         String first_name, language_code, first_name_chat, type, text;
-        
+
         try {
             URL url = new URL("https://api.telegram.org/bot" + key + "/getUpdates");
             Scanner s = new Scanner(url.openStream());
@@ -39,7 +42,7 @@ public class getUpdates {
             arrayAtt = obj.getJSONArray("result");
             System.out.println("Elementi: " + arrayAtt.length());
             System.out.println("---------------------------------------------------------------------------------------------------------------");
-            
+
             if (arrayAtt.length() > 0) {
                 for (int i = 0; i < arrayAtt.length(); i++) {
                     updtate_id = arrayAtt.getJSONObject(i).getInt("update_id");
@@ -54,7 +57,7 @@ public class getUpdates {
                     date = arrayAtt.getJSONObject(i).getJSONObject("message").getInt("date");
                     text = (String) arrayAtt.getJSONObject(i).getJSONObject("message").getString("text");
 
-                    if (text.startsWith("/citta")) {                        
+                    if (text.startsWith("/citta")) {
                         if (text.length() > 6) {
                             String tmpString = text.substring(7);
                             System.out.println(tmpString);
@@ -62,14 +65,19 @@ public class getUpdates {
                             //myWriter.append(updtate_id+";"+first_name+";"+tmpString+";"+"\n");
                             myWriter.write(updtate_id + ";" + first_name + ";" + tmpString + ";" + "\n");
                             myWriter.close();
+                            OsmAPI osmObject= new OsmAPI();
 
+         
+                            url = new URL("https://api.telegram.org/bot" + key + "/sendMessage?chat_id=" + id_chat + "&text="+osmObject.leggiXML(tmpString));
+                        s = new Scanner(url.openStream());
+                            s.next();
+                        }else{
+                         url = new URL("https://api.telegram.org/bot" + key + "/sendMessage?chat_id=" + id_chat + "&text=errore");
+                        s = new Scanner(url.openStream());
+                            s.next();
                         }
 
                         System.out.println("si");
-                        
-                        url = new URL("https://api.telegram.org/bot" + key + "/sendMessage?chat_id=" + id_chat + "&text=coordinate");
-                        s = new Scanner(url.openStream());
-                        s.next();
 
                     } else {
                         System.out.println("no");
@@ -90,6 +98,10 @@ public class getUpdates {
         } catch (MalformedURLException ex) {
             Logger.getLogger(getUpdates.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
+            Logger.getLogger(getUpdates.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SAXException ex) {
+            Logger.getLogger(getUpdates.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParserConfigurationException ex) {
             Logger.getLogger(getUpdates.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
