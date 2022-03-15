@@ -66,23 +66,15 @@ public class MyXMLOperations {
 
         if (nodelist != null && nodelist.getLength() > 0) {
             int numNode = nodelist.getLength();
-
-            //for (int j = 0; j < numNode; j++) {
-
                 element = (Element) nodelist.item(0);
-//                System.out.println("Numero di figli: "+element.getChildNodes().getLength());
-                int numeroAttributi = nodelist.item(0).getAttributes().getLength();
- //               System.out.println("Numero Child " + j + " " + numeroChild);
-                dato = getInfo(element, numeroAttributi);
+                dato = getInfo(element);
                 dati.add(dato);
-           // }
-
         }
 
         return dati;
     }
 
-    private attributi getInfo(Element element, int numeroAttributi) {
+    private attributi getInfo(Element element) {
 
         attributi valute = null;
         String lat = null;

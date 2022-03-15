@@ -6,11 +6,18 @@
 package telegram.api;
 
 import Osm.api.OsmAPI;
+import Osm.api.attributi;
+import java.awt.Color;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -61,26 +68,44 @@ public class getUpdates {
                         if (text.length() > 6) {
                             String tmpString = text.substring(7);
                             System.out.println(tmpString);
+                            //controllo della presenza dell'utente
+                    List<datiPersona> dati = this.leggiFile();
+                           for (int j = 0; j < dati.size(); j++) {
+                               if (dati.get(j).getId().equals(id)) {
+                                    dati.add(new datiPersona(dati.get(j).getId(),dati.get(j).getNome(),tmpString));
+                                    dati.remove(j);    
+                                    //scrivo su file
+                                    this.scriviListFile(dati);
+                               }
+                                 
+                            System.out.println(dati.get(i));
+                        }
+                     
+                       
+                        
                             FileWriter myWriter = new FileWriter("salvaUtenti.csv", true);
                             //myWriter.append(updtate_id+";"+first_name+";"+tmpString+";"+"\n");
-                            myWriter.write(updtate_id + ";" + first_name + ";" + tmpString + ";" + "\n");
+                            myWriter.write(id + ";" + first_name + ";" + tmpString + ";" + "\n");
                             myWriter.close();
-                            OsmAPI osmObject= new OsmAPI();
+                            OsmAPI osmObject = new OsmAPI();
 
-         
-                            url = new URL("https://api.telegram.org/bot" + key + "/sendMessage?chat_id=" + id_chat + "&text="+osmObject.leggiXML(tmpString));
-                        s = new Scanner(url.openStream());
+                            url = new URL("https://api.telegram.org/bot" + key + "/sendMessage?chat_id=" + id_chat + "&text=" + osmObject.leggiXML(tmpString));
+                            s = new Scanner(url.openStream());
                             s.next();
-                        }else{
-                         url = new URL("https://api.telegram.org/bot" + key + "/sendMessage?chat_id=" + id_chat + "&text=errore");
-                        s = new Scanner(url.openStream());
+                        } else {
+                            url = new URL("https://api.telegram.org/bot" + key + "/sendMessage?chat_id=" + id_chat + "&text=errore");
+                            s = new Scanner(url.openStream());
                             s.next();
                         }
 
-                        System.out.println("si");
+                        System.out.println("-----si-----");
 
                     } else {
-                        System.out.println("no");
+                        System.out.println("-----no-----");
+                        
+    
+                     
+                        
                     }
 
                     System.out.println("updtate_id: " + updtate_id + "\n" + "message_id: " + message_id + "\n" + "id: " + id + "\n" + "is_bot: " + is_bot + "\n" + "first_name: " + first_name + "\n" + "language_code: " + language_code + "\n" + "id_chat: " + id_chat + "\n" + "first_name_chat: " + first_name_chat + "\n" + "date: " + date + "\n" + "text: " + text);
@@ -97,13 +122,46 @@ public class getUpdates {
             }
         } catch (MalformedURLException ex) {
             Logger.getLogger(getUpdates.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(getUpdates.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SAXException ex) {
-            Logger.getLogger(getUpdates.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParserConfigurationException ex) {
+        } catch (IOException | SAXException | ParserConfigurationException ex) {
             Logger.getLogger(getUpdates.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public List<datiPersona> leggiFile() throws FileNotFoundException, IOException {
+        BufferedReader reader;
+        List<datiPersona> n = new ArrayList<>();
+
+        reader = new BufferedReader(new FileReader("salvaUtenti.csv"));
+        String line;
+        while ((line = reader.readLine()) != null) {
+            String[] split = line.split(";");
+            n.add(new datiPersona(split[0], split[1], split[2]));
+            System.out.println(split[0] + " " + split[1] + " " + split[2]);
+           
+        }
+
+        reader.close();
+        return n;
+    }
+    
+    public void scriviListFile(List<datiPersona> l) {
+        FileWriter myWriter;
+        try {
+             myWriter = new FileWriter("salvaUtenti.csv");
+             myWriter.write("");
+             myWriter.close();
+        myWriter = new FileWriter("salvaUtenti.csv",true);
+            for (int i = 0; i < l.size(); i++) {
+            String file= l.toString();
+            myWriter.write(file);
+            
+            }
+       myWriter.close();
+        } catch (IOException ex) {
+            Logger.getLogger(getUpdates.class.getName()).log(Level.SEVERE, null, ex);
+        }
+ 
+
     }
 
 }
