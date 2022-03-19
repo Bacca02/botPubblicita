@@ -52,7 +52,7 @@ public class OsmAPI {
                 Scanner s = new Scanner(url.openStream());
                 s.useDelimiter("\u001a");
                 String oggetto = s.next();
-                System.out.println("OsmAPI: " + oggetto);
+               // System.out.println("OsmAPI: " + oggetto);
 
                 in = new BufferedReader(new InputStreamReader(url.openStream()));
                 String line;
@@ -80,8 +80,8 @@ public class OsmAPI {
         dati = xml.parseDocument(xmlFile);
 
         for (int i = 0; i < dati.size(); i++) {
-            System.out.println(dati.get(i).lat);
-            System.out.println(dati.get(i).lon);
+           // System.out.println(dati.get(i).lat);
+           // System.out.println(dati.get(i).lon);
         }
         return (dati.get(0).lat)+";"+(dati.get(0).lon)+";";
     }

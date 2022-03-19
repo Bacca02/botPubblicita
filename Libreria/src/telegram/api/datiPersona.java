@@ -30,9 +30,10 @@ public class datiPersona {
         return citta;
     }
 
-    @Override
-    public String toString() {
-        return id + ";" + nome + ";" + citta + ";";
-    }
+
+ public String datiToString(){
+     String tmp = id+";"+nome+";"+citta+";"+"\n";
+ return tmp;
+ }
     
 }

@@ -19,7 +19,7 @@ public class Telegram{
 
   public static String chiave = "5203116920:AAHuP1bVt5Q0v4lZh62Np_qww2-4uxnstt8";
     public static void main(String[] args) throws IOException, SAXException{
-        TelegramAPI a= new TelegramAPI(chiave);
-        a.getUpdates();
+       threadTelegram t= new threadTelegram();
+       t.start();
     }
 }

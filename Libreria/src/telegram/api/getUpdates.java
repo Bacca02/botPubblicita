@@ -43,12 +43,12 @@ public class getUpdates {
             Scanner s = new Scanner(url.openStream());
             s.useDelimiter("\u001a");
             String jsonString = s.next();
-            System.out.println(jsonString);
+            // System.out.println(jsonString);
             JSONObject obj = new JSONObject(jsonString);
 
             arrayAtt = obj.getJSONArray("result");
-            System.out.println("Elementi: " + arrayAtt.length());
-            System.out.println("---------------------------------------------------------------------------------------------------------------");
+            // System.out.println("Elementi: " + arrayAtt.length());
+            //System.out.println("---------------------------------------------------------------------------------------------------------------");
 
             if (arrayAtt.length() > 0) {
                 for (int i = 0; i < arrayAtt.length(); i++) {
@@ -67,26 +67,59 @@ public class getUpdates {
                     if (text.startsWith("/citta")) {
                         if (text.length() > 6) {
                             String tmpString = text.substring(7);
-                            System.out.println(tmpString);
+                            // System.out.println(tmpString);
                             //controllo della presenza dell'utente
-                    List<datiPersona> dati = this.leggiFile();
-                           for (int j = 0; j < dati.size(); j++) {
-                               if (dati.get(j).getId().equals(id)) {
-                                    dati.add(new datiPersona(dati.get(j).getId(),dati.get(j).getNome(),tmpString));
-                                    dati.remove(j);    
-                                    //scrivo su file
-                                    this.scriviListFile(dati);
-                               }
-                                 
-                            System.out.println(dati.get(i));
-                        }
-                     
-                       
-                        
-                            FileWriter myWriter = new FileWriter("salvaUtenti.csv", true);
-                            //myWriter.append(updtate_id+";"+first_name+";"+tmpString+";"+"\n");
-                            myWriter.write(id + ";" + first_name + ";" + tmpString + ";" + "\n");
-                            myWriter.close();
+                            boolean trovato = false;
+                            List<datiPersona> dati = this.leggiFile();
+                            if (dati.size() > 0) {
+                                for (int j = 0; j < dati.size(); j++) {
+                                    System.out.println("Prova-------------" + dati.get(j).getId() + " " + dati.get(j).getNome() + " " + dati.get(j).getCitta());
+                                    //Controllo che l'ID alla pos j del file sia già presente
+                                    System.out.println("Dati getId "+dati.get(j).getId());
+                                    //System.out.println("Dati id "+id.);
+                                    
+                                     
+                                    if (dati.get(j).getId().equals(id+"")) {
+                                        //Persona trovata
+                                        trovato = true;
+                                        System.out.println("Dati 1 "+dati.size());
+                                        //Aggiungo alla lista dati un nuovo elemento
+                                        dati.add(new datiPersona(dati.get(j).getId(), dati.get(j).getNome(), tmpString));
+                                         System.out.println("Dati 2 "+dati.size());
+                                        //Rimuovo dalla lista l'elemento doppio
+                                        dati.remove(j);
+                                         System.out.println("Dati 3 "+dati.size());
+                                        //scrivo la nuova lista su file
+                                        this.resettaFile();
+                                        this.scriviListFile(dati);
+                                        //dati.size elementi-1
+                                        for (int k = 0; k < dati.size(); k++) {
+                                            System.out.println("GetID " + dati.get(j).getId());
+                                            System.out.println("GetNome " + dati.get(j).getNome());
+                                            System.out.println("GetCitta " + dati.get(j).getCitta());
+
+                                            System.out.println("Prova2-------------" + dati.get(k).getId() + " " + dati.get(k).getNome() + " " + dati.get(k).getCitta());
+                                           
+                                        }                                    
+                                
+                                    }
+
+                                    // System.out.println(dati.get(i));
+                                }
+                                if (!trovato) {
+                                    FileWriter myWriter = new FileWriter("salvaUtenti.csv", true);
+                                    //myWriter.append(updtate_id+";"+first_name+";"+tmpString+";"+"\n");
+                                    myWriter.write(id + ";" + first_name + ";" + tmpString + ";" + "\n");
+                                    myWriter.close();
+
+                                }
+                            } else {
+                                FileWriter myWriter = new FileWriter("salvaUtenti.csv", true);
+                                //myWriter.append(updtate_id+";"+first_name+";"+tmpString+";"+"\n");
+                                myWriter.write(id + ";" + first_name + ";" + tmpString + ";" + "\n");
+                                myWriter.close();
+                            }
+
                             OsmAPI osmObject = new OsmAPI();
 
                             url = new URL("https://api.telegram.org/bot" + key + "/sendMessage?chat_id=" + id_chat + "&text=" + osmObject.leggiXML(tmpString));
@@ -102,23 +135,19 @@ public class getUpdates {
 
                     } else {
                         System.out.println("-----no-----");
-                        
-    
-                     
-                        
+
                     }
 
-                    System.out.println("updtate_id: " + updtate_id + "\n" + "message_id: " + message_id + "\n" + "id: " + id + "\n" + "is_bot: " + is_bot + "\n" + "first_name: " + first_name + "\n" + "language_code: " + language_code + "\n" + "id_chat: " + id_chat + "\n" + "first_name_chat: " + first_name_chat + "\n" + "date: " + date + "\n" + "text: " + text);
+                    //  System.out.println("updtate_id: " + updtate_id + "\n" + "message_id: " + message_id + "\n" + "id: " + id + "\n" + "is_bot: " + is_bot + "\n" + "first_name: " + first_name + "\n" + "language_code: " + language_code + "\n" + "id_chat: " + id_chat + "\n" + "first_name_chat: " + first_name_chat + "\n" + "date: " + date + "\n" + "text: " + text);
                     System.out.println("---------------------------------------------------------------------------------------------------------------");
                 }
 
                 int tmpID = arrayAtt.getJSONObject(arrayAtt.length() - 1).getInt("update_id") + 1;
-                System.out.println("S:" + tmpID);
+                //  System.out.println("S:" + tmpID);
 
                 url = new URL("https://api.telegram.org/bot" + key + "/getUpdates?offset=" + tmpID);
                 s = new Scanner(url.openStream());
                 s.next();
-
             }
         } catch (MalformedURLException ex) {
             Logger.getLogger(getUpdates.class.getName()).log(Level.SEVERE, null, ex);
@@ -136,31 +165,40 @@ public class getUpdates {
         while ((line = reader.readLine()) != null) {
             String[] split = line.split(";");
             n.add(new datiPersona(split[0], split[1], split[2]));
-            System.out.println(split[0] + " " + split[1] + " " + split[2]);
-           
+            //  System.out.println(split[0] + " " + split[1] + " " + split[2]);
+
         }
 
         reader.close();
         return n;
     }
-    
-    public void scriviListFile(List<datiPersona> l) {
+
+    public void resettaFile() {
         FileWriter myWriter;
         try {
-             myWriter = new FileWriter("salvaUtenti.csv");
-             myWriter.write("");
-             myWriter.close();
-        myWriter = new FileWriter("salvaUtenti.csv",true);
-            for (int i = 0; i < l.size(); i++) {
-            String file= l.toString();
-            myWriter.write(file);
-            
-            }
-       myWriter.close();
+            myWriter = new FileWriter("salvaUtenti.csv");
+            myWriter.write("");
+            myWriter.close();
         } catch (IOException ex) {
             Logger.getLogger(getUpdates.class.getName()).log(Level.SEVERE, null, ex);
         }
- 
+
+    }
+
+    public void scriviListFile(List<datiPersona> l) {
+        System.out.println("salvato..................................................");
+        FileWriter myWriter;
+        try {
+            myWriter = new FileWriter("salvaUtenti.csv", true);
+            for (int i = 0; i < l.size(); i++) {
+                String file = l.get(i).datiToString();
+                myWriter.write(file);
+
+            }
+            myWriter.close();
+        } catch (IOException ex) {
+            Logger.getLogger(getUpdates.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
 
