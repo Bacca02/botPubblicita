@@ -21,6 +21,8 @@ import telegram.api.TelegramAPI;
 import telegram.api.datiPersona;
 import Osm.api.attributi;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 /**
@@ -51,6 +53,7 @@ public class telegramMain extends javax.swing.JFrame {
         Citta_TextArea = new javax.swing.JTextArea();
         Invia_button = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
+        KM_TextField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -70,7 +73,8 @@ public class telegramMain extends javax.swing.JFrame {
             }
         });
 
-        jLabel2.setText("%0A -> per l'invio");
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel2.setText("KM");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -78,42 +82,42 @@ public class telegramMain extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(30, 30, 30)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Citta_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(Citta_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(Invia_button))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(31, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(21, 21, 21))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE)
+                            .addComponent(KM_TextField))
+                        .addGap(18, 18, 18)
+                        .addComponent(Invia_button, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(6, 6, 6)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Citta_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Invia_button, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(9, 9, 9)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(Citta_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(4, 4, 4)
+                        .addComponent(KM_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(Invia_button, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void Invia_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Invia_buttonActionPerformed
-        if (Citta_TextField.getText().equals("") || Citta_TextArea.getText().equals("")) {
+        if (Citta_TextField.getText().equals("") || Citta_TextArea.getText().equals("")||KM_TextField.getText().equals("")) {
             JOptionPane.showMessageDialog(rootPane, "Errore, inserisci città o testo");
         } else {
             try {
@@ -127,7 +131,7 @@ public class telegramMain extends javax.swing.JFrame {
                 for (int i = 0; i < dati.size(); i++) {
                     URL url;
                     Scanner s;
-                    if (distanza(Double.parseDouble(dati.get(i).getLat()), Double.parseDouble(dati.get(i).getLon()),Double.parseDouble(a.getLat()), Double.parseDouble(a.getLon()), "K") <= 5) {
+                    if (distanza(Double.parseDouble(dati.get(i).getLat()), Double.parseDouble(dati.get(i).getLon()),Double.parseDouble(a.getLat()), Double.parseDouble(a.getLon()), "K") <= Integer.parseInt(KM_TextField.getText())) {
                     System.out.println("KM "+distanza(Double.parseDouble(dati.get(i).getLat()), Double.parseDouble(dati.get(i).getLon()),Double.parseDouble(a.getLat()), Double.parseDouble(a.getLon()), "K"));
                     System.out.println("CittaLon "+a.getLon());
                     System.out.println("CittaLat "+a.getLat());
@@ -135,7 +139,7 @@ public class telegramMain extends javax.swing.JFrame {
                     System.out.println("CittaLatDati "+dati.get(i).getLat());
                     System.out.println("*********************************");
                     //if (Citta_TextField.getText().equals(dati.get(i).getCitta())) {
-                        url = new URL("https://api.telegram.org/bot" + chiave + "/sendMessage?chat_id=" + dati.get(i).getId() + "&text=" + Citta_TextArea.getText());
+                        url = new URL("https://api.telegram.org/bot" + chiave + "/sendMessage?chat_id=" + dati.get(i).getId() + "&text=" +URLEncoder.encode( Citta_TextArea.getText(), StandardCharsets.UTF_8));
                         System.out.println("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\");
                         System.out.println("Chat id "+dati.get(i).getId());
                         System.out.println("Testo "+Citta_TextArea.getText());
@@ -153,6 +157,7 @@ public class telegramMain extends javax.swing.JFrame {
             }
             Citta_TextArea.setText("");
             Citta_TextField.setText("");
+            KM_TextField.setText("");
             
         }
 
@@ -212,6 +217,7 @@ public class telegramMain extends javax.swing.JFrame {
     private javax.swing.JTextArea Citta_TextArea;
     private javax.swing.JTextField Citta_TextField;
     private javax.swing.JButton Invia_button;
+    private javax.swing.JTextField KM_TextField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
