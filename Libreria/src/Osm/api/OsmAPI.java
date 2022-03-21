@@ -22,7 +22,6 @@ import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
-
 /**
  *
  * @author baccaglini_christian
@@ -52,7 +51,7 @@ public class OsmAPI {
                 Scanner s = new Scanner(url.openStream());
                 s.useDelimiter("\u001a");
                 String oggetto = s.next();
-               // System.out.println("OsmAPI: " + oggetto);
+                // System.out.println("OsmAPI: " + oggetto);
 
                 in = new BufferedReader(new InputStreamReader(url.openStream()));
                 String line;
@@ -78,12 +77,12 @@ public class OsmAPI {
 
         dati = new ArrayList<>();
         dati = xml.parseDocument(xmlFile);
-
-        for (int i = 0; i < dati.size(); i++) {
-           // System.out.println(dati.get(i).lat);
-           // System.out.println(dati.get(i).lon);
+        attributi a;
+        if (dati.size() > 0) {
+            a = new attributi(dati.get(0).lat, dati.get(0).lon);
+        } else {
+            a = new attributi("0", "0");
         }
-        attributi a=new attributi(dati.get(0).lat, dati.get(0).lon);
         return a;
     }
 }

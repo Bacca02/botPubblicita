@@ -62,7 +62,13 @@ public class getUpdates {
                     first_name_chat = arrayAtt.getJSONObject(i).getJSONObject("message").getJSONObject("chat").getString("first_name");
                     type = arrayAtt.getJSONObject(i).getJSONObject("message").getJSONObject("chat").getString("type");
                     date = arrayAtt.getJSONObject(i).getJSONObject("message").getInt("date");
+                    
+                    if (arrayAtt.getJSONObject(i).getJSONObject("message").isNull("text")) {
+                        text= "/citta stringanulla";
+                    }else{
                     text = (String) arrayAtt.getJSONObject(i).getJSONObject("message").getString("text");
+                    }
+                    
 
                     if (text.startsWith("/citta")) {
                         if (text.length() > 6) {
@@ -71,66 +77,71 @@ public class getUpdates {
                             //controllo della presenza dell'utente
                             boolean trovato = false;
                             List<datiPersona> dati = this.leggiFile();
-                            if (dati.size() > 0) {
-                                for (int j = 0; j < dati.size(); j++) {
-                                    System.out.println("Prova-------------" + dati.get(j).getId() + " " + dati.get(j).getNome() + " " + dati.get(j).getCitta() + " " + dati.get(j).getLat() + " " + dati.get(j).getLon());
-                                    //Controllo che l'ID alla pos j del file sia già presente
-                                    System.out.println("Dati getId " + dati.get(j).getId());
-                                    //System.out.println("Dati id "+id.);
+                            OsmAPI osm = new OsmAPI();
+                            attributi a = osm.leggiXML(tmpString);
+                            if (!a.getLat().equals("0") && !a.getLon().equals("0")) {
+                                if (dati.size() > 0) {
+                                    for (int j = 0; j < dati.size(); j++) {
+                                        System.out.println("Prova-------------" + dati.get(j).getId() + " " + dati.get(j).getNome() + " " + dati.get(j).getCitta() + " " + dati.get(j).getLat() + " " + dati.get(j).getLon());
+                                        //Controllo che l'ID alla pos j del file sia già presente
+                                        System.out.println("Dati getId " + dati.get(j).getId());
+                                        //System.out.println("Dati id "+id.);
 
-                                    if (dati.get(j).getId().equals(id + "")) {
-                                        //Persona trovata
-                                        trovato = true;
-                                        System.out.println("Dati 1 " + dati.size());
-                                        //Aggiungo alla lista dati un nuovo elemento
-                                        OsmAPI osm = new OsmAPI();
-                                        attributi a = osm.leggiXML(tmpString);
-                                        dati.add(new datiPersona(dati.get(j).getId(), dati.get(j).getNome(), tmpString, a.getLat(), a.getLon()));
-                                        System.out.println("Dati 2 " + dati.size());
-                                        //Rimuovo dalla lista l'elemento doppio
-                                        dati.remove(j);
-                                        System.out.println("Dati 3 " + dati.size());
-                                        //scrivo la nuova lista su file
-                                        this.resettaFile();
-                                        this.scriviListFile(dati);
-                                        //dati.size elementi-1
-                                        for (int k = 0; k < dati.size(); k++) {
-                                            System.out.println("GetID " + dati.get(j).getId());
-                                            System.out.println("GetNome " + dati.get(j).getNome());
-                                            System.out.println("GetCitta " + dati.get(j).getCitta());
-                                            System.out.println("GetCitta " + dati.get(j).getCitta());
-                                            //System.out.println("Prova2-------------" + dati.get(k).getId() + " " + dati.get(k).getNome() + " " + dati.get(k).getCitta());
+                                        if (dati.get(j).getId().equals(id + "")) {
+                                            //Persona trovata
+                                            trovato = true;
+                                            System.out.println("Dati 1 " + dati.size());
+                                            //Aggiungo alla lista dati un nuovo elemento
+
+                                            dati.add(new datiPersona(dati.get(j).getId(), dati.get(j).getNome(), tmpString, a.getLat(), a.getLon()));
+                                            System.out.println("Dati 2 " + dati.size());
+                                            //Rimuovo dalla lista l'elemento doppio
+                                            dati.remove(j);
+                                            System.out.println("Dati 3 " + dati.size());
+                                            //scrivo la nuova lista su file
+                                            this.resettaFile();
+                                            this.scriviListFile(dati);
+                                            //dati.size elementi-1
+                                            for (int k = 0; k < dati.size(); k++) {
+                                                System.out.println("GetID " + dati.get(j).getId());
+                                                System.out.println("GetNome " + dati.get(j).getNome());
+                                                System.out.println("GetCitta " + dati.get(j).getCitta());
+                                                System.out.println("GetCitta " + dati.get(j).getCitta());
+                                                //System.out.println("Prova2-------------" + dati.get(k).getId() + " " + dati.get(k).getNome() + " " + dati.get(k).getCitta());
+
+                                            }
 
                                         }
 
+                                        // System.out.println(dati.get(i));
                                     }
+                                    if (!trovato) {
+                                        FileWriter myWriter = new FileWriter("salvaUtenti.csv", true);
+                                        //myWriter.append(updtate_id+";"+first_name+";"+tmpString+";"+"\n");
 
-                                    // System.out.println(dati.get(i));
-                                }
-                                if (!trovato) {
+                                        myWriter.write(id + ";" + first_name + ";" + tmpString + ";" + a.getLat() + ";" + a.getLon() + ";" + "\n");
+                                        myWriter.close();
+
+                                    }
+                                } else {
                                     FileWriter myWriter = new FileWriter("salvaUtenti.csv", true);
                                     //myWriter.append(updtate_id+";"+first_name+";"+tmpString+";"+"\n");
-                                    OsmAPI osm = new OsmAPI();
-                                    attributi a = osm.leggiXML(tmpString);
+
                                     myWriter.write(id + ";" + first_name + ";" + tmpString + ";" + a.getLat() + ";" + a.getLon() + ";" + "\n");
                                     myWriter.close();
-
                                 }
+                            }
+                            // a = osmObject.leggiXML(tmpString);
+                            if (a.getLat().equals("0") && a.getLon().equals("0")) {
+                                url = new URL("https://api.telegram.org/bot" + key + "/sendMessage?chat_id=" + id_chat + "&text=Non trovato");
+                                s = new Scanner(url.openStream());
+                                s.next();
                             } else {
-                                FileWriter myWriter = new FileWriter("salvaUtenti.csv", true);
-                                //myWriter.append(updtate_id+";"+first_name+";"+tmpString+";"+"\n");
-                                OsmAPI osm = new OsmAPI();
-                                attributi a = osm.leggiXML(tmpString);
-                                myWriter.write(id + ";" + first_name + ";" + tmpString + ";" + a.getLat() + ";" + a.getLon() + ";" + "\n");
-                                myWriter.close();
+                                url = new URL("https://api.telegram.org/bot" + key + "/sendMessage?chat_id=" + id_chat + "&text=" + a.getLat() + " " + a.getLon());
+                                s = new Scanner(url.openStream());
+                                s.next();
                             }
 
-                            OsmAPI osmObject = new OsmAPI();
-                            attributi a = osmObject.leggiXML(tmpString);
-
-                            url = new URL("https://api.telegram.org/bot" + key + "/sendMessage?chat_id=" + id_chat + "&text=" + a.getLat() + " " + a.getLon());
-                            s = new Scanner(url.openStream());
-                            s.next();
                         } else {
                             url = new URL("https://api.telegram.org/bot" + key + "/sendMessage?chat_id=" + id_chat + "&text=errore");
                             s = new Scanner(url.openStream());

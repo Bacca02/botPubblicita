@@ -81,6 +81,7 @@ public class MyXMLOperations {
         String lon = null;
         lat= element.getAttribute("lat");
         lon= element.getAttribute("lon");
+   //     System.out.println("Citta **************************************************************************************************************"+element.getElementsByTagName("postcode").item(0).getTextContent());
         System.out.println("Lat: "+lat+" Lon: "+lon);
         valute= new attributi(lat,lon);
         return valute;
@@ -93,6 +94,7 @@ public class MyXMLOperations {
         nodelist = element.getElementsByTagName(tag);
         if (nodelist != null && nodelist.getLength() > 0) {
             value = nodelist.item(0).getFirstChild().getNodeValue();
+            
         }
         return value;
     }

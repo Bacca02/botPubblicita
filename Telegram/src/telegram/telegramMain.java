@@ -70,7 +70,7 @@ public class telegramMain extends javax.swing.JFrame {
             }
         });
 
-        jLabel2.setText("%0A -> per gli spazi");
+        jLabel2.setText("%0A -> per l'invio");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
