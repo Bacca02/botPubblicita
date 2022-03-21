@@ -33,7 +33,7 @@ public class OsmAPI {
 
     }
 
-    public String leggiXML(String ricerca) throws IOException, SAXException, ParserConfigurationException {
+    public attributi leggiXML(String ricerca) throws IOException, SAXException, ParserConfigurationException {
 
         BufferedReader in = null;
         PrintWriter out;
@@ -83,6 +83,7 @@ public class OsmAPI {
            // System.out.println(dati.get(i).lat);
            // System.out.println(dati.get(i).lon);
         }
-        return (dati.get(0).lat)+";"+(dati.get(0).lon)+";";
+        attributi a=new attributi(dati.get(0).lat, dati.get(0).lon);
+        return a;
     }
 }

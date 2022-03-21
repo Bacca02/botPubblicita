@@ -10,12 +10,14 @@ package telegram.api;
  * @author baccaglini_christian
  */
 public class datiPersona {
-    String id,nome,citta;
+    String id,nome,citta,lat,lon;
 
-    public datiPersona(String id, String nome, String citta) {
+    public datiPersona(String id, String nome, String citta,String lat,String lon) {
         this.id = id;
         this.nome = nome;
         this.citta = citta;
+        this.lat= lat;
+        this.lon=lon;
     }
 
     public String getId() {
@@ -30,9 +32,17 @@ public class datiPersona {
         return citta;
     }
 
+    public String getLat() {
+        return lat;
+    }
+
+    public String getLon() {
+        return lon;
+    }
+
 
  public String datiToString(){
-     String tmp = id+";"+nome+";"+citta+";"+"\n";
+     String tmp = id+";"+nome+";"+citta+";"+lat+";"+lon+";"+"\n";
  return tmp;
  }
     

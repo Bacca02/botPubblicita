@@ -6,7 +6,8 @@
             <file>file:/D:/ProgettiGitHub/botPubblicita/Libreria/src/Osm/api/OsmAPI.java</file>
             <file>file:/D:/ProgettiGitHub/botPubblicita/Libreria/src/telegram/api/TelegramAPI.java</file>
             <file>file:/D:/ProgettiGitHub/botPubblicita/Libreria/src/telegram/api/getUpdates.java</file>
-            <file>file:/D:/ProgettiGitHub/botPubblicita/Libreria/src/telegram/api/sendMessage.java</file>
+            <file>file:/D:/ProgettiGitHub/botPubblicita/Libreria/src/Osm/api/attributi.java</file>
+            <file>file:/D:/ProgettiGitHub/botPubblicita/Libreria/src/Osm/api/MyXMLOperations.java</file>
             <file>file:/D:/ProgettiGitHub/botPubblicita/Libreria/src/telegram/api/datiPersona.java</file>
         </group>
     </open-files>

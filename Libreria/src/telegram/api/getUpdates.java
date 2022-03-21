@@ -73,22 +73,23 @@ public class getUpdates {
                             List<datiPersona> dati = this.leggiFile();
                             if (dati.size() > 0) {
                                 for (int j = 0; j < dati.size(); j++) {
-                                    System.out.println("Prova-------------" + dati.get(j).getId() + " " + dati.get(j).getNome() + " " + dati.get(j).getCitta());
+                                    System.out.println("Prova-------------" + dati.get(j).getId() + " " + dati.get(j).getNome() + " " + dati.get(j).getCitta() + " " + dati.get(j).getLat() + " " + dati.get(j).getLon());
                                     //Controllo che l'ID alla pos j del file sia già presente
-                                    System.out.println("Dati getId "+dati.get(j).getId());
+                                    System.out.println("Dati getId " + dati.get(j).getId());
                                     //System.out.println("Dati id "+id.);
-                                    
-                                     
-                                    if (dati.get(j).getId().equals(id+"")) {
+
+                                    if (dati.get(j).getId().equals(id + "")) {
                                         //Persona trovata
                                         trovato = true;
-                                        System.out.println("Dati 1 "+dati.size());
+                                        System.out.println("Dati 1 " + dati.size());
                                         //Aggiungo alla lista dati un nuovo elemento
-                                        dati.add(new datiPersona(dati.get(j).getId(), dati.get(j).getNome(), tmpString));
-                                         System.out.println("Dati 2 "+dati.size());
+                                        OsmAPI osm = new OsmAPI();
+                                        attributi a = osm.leggiXML(tmpString);
+                                        dati.add(new datiPersona(dati.get(j).getId(), dati.get(j).getNome(), tmpString, a.getLat(), a.getLon()));
+                                        System.out.println("Dati 2 " + dati.size());
                                         //Rimuovo dalla lista l'elemento doppio
                                         dati.remove(j);
-                                         System.out.println("Dati 3 "+dati.size());
+                                        System.out.println("Dati 3 " + dati.size());
                                         //scrivo la nuova lista su file
                                         this.resettaFile();
                                         this.scriviListFile(dati);
@@ -97,11 +98,11 @@ public class getUpdates {
                                             System.out.println("GetID " + dati.get(j).getId());
                                             System.out.println("GetNome " + dati.get(j).getNome());
                                             System.out.println("GetCitta " + dati.get(j).getCitta());
+                                            System.out.println("GetCitta " + dati.get(j).getCitta());
+                                            //System.out.println("Prova2-------------" + dati.get(k).getId() + " " + dati.get(k).getNome() + " " + dati.get(k).getCitta());
 
-                                            System.out.println("Prova2-------------" + dati.get(k).getId() + " " + dati.get(k).getNome() + " " + dati.get(k).getCitta());
-                                           
-                                        }                                    
-                                
+                                        }
+
                                     }
 
                                     // System.out.println(dati.get(i));
@@ -109,20 +110,25 @@ public class getUpdates {
                                 if (!trovato) {
                                     FileWriter myWriter = new FileWriter("salvaUtenti.csv", true);
                                     //myWriter.append(updtate_id+";"+first_name+";"+tmpString+";"+"\n");
-                                    myWriter.write(id + ";" + first_name + ";" + tmpString + ";" + "\n");
+                                    OsmAPI osm = new OsmAPI();
+                                    attributi a = osm.leggiXML(tmpString);
+                                    myWriter.write(id + ";" + first_name + ";" + tmpString + ";" + a.getLat() + ";" + a.getLon() + ";" + "\n");
                                     myWriter.close();
 
                                 }
                             } else {
                                 FileWriter myWriter = new FileWriter("salvaUtenti.csv", true);
                                 //myWriter.append(updtate_id+";"+first_name+";"+tmpString+";"+"\n");
-                                myWriter.write(id + ";" + first_name + ";" + tmpString + ";" + "\n");
+                                OsmAPI osm = new OsmAPI();
+                                attributi a = osm.leggiXML(tmpString);
+                                myWriter.write(id + ";" + first_name + ";" + tmpString + ";" + a.getLat() + ";" + a.getLon() + ";" + "\n");
                                 myWriter.close();
                             }
 
                             OsmAPI osmObject = new OsmAPI();
+                            attributi a = osmObject.leggiXML(tmpString);
 
-                            url = new URL("https://api.telegram.org/bot" + key + "/sendMessage?chat_id=" + id_chat + "&text=" + osmObject.leggiXML(tmpString));
+                            url = new URL("https://api.telegram.org/bot" + key + "/sendMessage?chat_id=" + id_chat + "&text=" + a.getLat() + " " + a.getLon());
                             s = new Scanner(url.openStream());
                             s.next();
                         } else {
@@ -164,7 +170,7 @@ public class getUpdates {
         String line;
         while ((line = reader.readLine()) != null) {
             String[] split = line.split(";");
-            n.add(new datiPersona(split[0], split[1], split[2]));
+            n.add(new datiPersona(split[0], split[1], split[2], split[3], split[4]));
             //  System.out.println(split[0] + " " + split[1] + " " + split[2]);
 
         }

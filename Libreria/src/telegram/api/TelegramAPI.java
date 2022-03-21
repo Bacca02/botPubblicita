@@ -20,6 +20,10 @@ public class TelegramAPI {
         this.key = key;
     }
 
+    public TelegramAPI() {
+    }
+    
+
     public void getUpdates() {
         new getUpdates(key);
     }

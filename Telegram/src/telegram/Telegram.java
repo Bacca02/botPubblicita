@@ -9,17 +9,20 @@ package telegram;
 
 import java.io.IOException;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JTextPane;
 import org.xml.sax.SAXException;
 import telegram.api.TelegramAPI;
 /**
  *
  * @author Utente
  */
-public class Telegram{
+public class Telegram extends JFrame{
 
   public static String chiave = "5203116920:AAHuP1bVt5Q0v4lZh62Np_qww2-4uxnstt8";
     public static void main(String[] args) throws IOException, SAXException{
        threadTelegram t= new threadTelegram();
        t.start();
+      Telegram main = new Telegram();
     }
 }
