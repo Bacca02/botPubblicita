@@ -7,7 +7,7 @@ package telegram;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static telegram.Telegram.chiave;
+import static telegram.telegramMain.chiave;
 import telegram.api.TelegramAPI;
 
 /**
